@@ -1,0 +1,7 @@
+class src_trans extends uvm_sequence_item;
+`uvm_object_utils(src_trans)
+
+	function new(string name = "src_trans");
+		super.new(name);
+	endfunction
+endclass

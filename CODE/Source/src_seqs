@@ -1,0 +1,16 @@
+
+class src_seqs extends uvm_sequence #(src_trans);
+`uvm_object_utils(src_seqs)
+
+	function new(string name = "src_seqs");
+		super.new(name);
+	endfunction
+
+	/*task body();
+		req = src_trans::type_id::create("req");
+		start_item(req);
+		assert(req.randomize());
+		finish_item(req);
+	endtask*/
+
+endclass

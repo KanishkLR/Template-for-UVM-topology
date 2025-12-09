@@ -1,0 +1,31 @@
+class dst_monitor extends uvm_monitor;
+`uvm_component_utils(dst_monitor)
+
+	uvm_analysis_port #(src_trans) dst_ap;
+
+	virtual home_if.SLAVE_MON vif;
+	dst_config dst_cfg;
+
+	function new(string name = "dst_monitor",uvm_component parent);
+		super.new(name,parent);
+		dst_ap= new("dst_ap",this);
+	endfunction
+
+	function void build_phase(uvm_phase phase);
+		if(!uvm_config_db #(dst_config)::get(this,"","dst_config",dst_cfg))
+		`uvm_fatal(get_type_name, "getting cfg failed")
+	endfunction
+
+	function void connect_phase(uvm_phase phase);
+		vif = dst_cfg.vif;
+	endfunction
+
+	task run_phase(uvm_phase phase);
+		super.run_phase(phase);
+	//	forever
+		//	collect_data();
+	endtask
+
+	//task collect data
+
+endclass

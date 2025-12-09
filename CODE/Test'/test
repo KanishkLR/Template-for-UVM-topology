@@ -1,0 +1,51 @@
+class home_test extends uvm_test;
+`uvm_component_utils(home_test)
+
+	virtual home_if vif;
+	env envh;
+	env_config env_cfg;
+	src_config src_cfg;
+	dst_config dst_cfg;
+	src_seqs seqsh;
+
+	function new(string name = "home_test", uvm_component parent);
+		super.new(name,parent);
+	endfunction
+
+	function void build_phase(uvm_phase phase);
+		super.build_phase(phase);
+
+		env_cfg = env_config ::type_id::create("env_cfg");
+
+		src_cfg = src_config ::type_id::create("src_cfg");
+		if(!uvm_config_db #(virtual home_if)::get(this,"","home_if",src_cfg.vif))
+			`uvm_fatal(get_type_name, "getting vif failed")
+	        src_cfg.is_active = UVM_ACTIVE;
+
+		dst_cfg = dst_config ::type_id::create("dst_cfg");
+		if(!uvm_config_db #(virtual home_if)::get(this,"","home_if",dst_cfg.vif))
+			`uvm_fatal(get_type_name, "getting vif failed")
+	       dst_cfg.is_active = UVM_PASSIVE;;
+
+		env_cfg.src_cfg = src_cfg;
+		env_cfg.dst_cfg = dst_cfg;
+
+		uvm_config_db #(env_config)::set(this,"*","env_config",env_cfg);
+
+		envh = env::type_id::create("envh",this);
+	endfunction
+
+	function void end_of_elaboration_phase(uvm_phase phase);
+		uvm_top.print_topology();
+	endfunction
+
+	task run_phase(uvm_phase phase);
+		super.run_phase(phase);
+		seqsh=src_seqs::type_id::create("seqsh");
+		phase.raise_objection(this);
+		seqsh.start(envh.src_agt.src_seqrh);
+		#100;
+		phase.drop_objection(this);
+	endtask
+ 
+endclass

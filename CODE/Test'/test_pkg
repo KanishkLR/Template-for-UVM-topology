@@ -1,0 +1,22 @@
+package test_pkg;
+	import uvm_pkg::*;
+	`include "uvm_macros.svh"
+
+	`include "src_xtn.sv"
+	`include "src_cfg.sv"
+	`include "dst_cfg.sv"
+	`include "env_cfg.sv"
+	`include "src_seqs.sv"
+	`include "src_monitor.sv"
+	`include "src_driver.sv"
+	`include "src_seqr.sv"
+	`include "src_agt.sv"
+	`include "dst_monitor.sv"
+	`include "dst_agt.sv"
+	`include "sb.sv"
+	`include "env.sv"
+	`include "test.sv"
+
+endpackage
+
+

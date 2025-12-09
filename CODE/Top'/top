@@ -1,0 +1,38 @@
+module top;
+
+	import uvm_pkg::*;			
+	import test_pkg::*;
+
+bit clock;
+
+always 
+	#5 clock = ~clock;
+
+	home_if src(clock);
+
+	home_security_system DUV(.clock(clock),
+	 	 		 .reset(src.reset),
+	          		 .door_sensor(src.door_sensor),
+		    		 .window_sensor(src.window_sensor),
+		    		 .motion_sensor(src.motion_sensor),
+		    		 .arm_system(src.arm_system),
+		    		 .system_armed(src.system_armed),
+		    		 .alarm(src.alarm));
+
+initial
+	begin
+	uvm_config_db#(virtual home_if)::set(null,"*","home_if",src);
+
+	run_test();
+	end
+
+endmodule
+
+
+
+
+
+
+
+
+

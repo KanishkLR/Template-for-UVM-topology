@@ -1,0 +1,31 @@
+class src_monitor extends uvm_monitor;
+`uvm_component_utils(src_monitor)
+
+	uvm_analysis_port #(src_trans) src_ap;
+
+	virtual home_if.MASTER_MON vif;
+	src_config src_cfg;
+	src_trans trans;
+
+	function new(string name = "src_monitor",uvm_component parent);
+	super.new(name,parent);
+	src_ap= new("src_ap",this);
+	endfunction
+	
+	function void build_phase(uvm_phase phase);
+		if(!uvm_config_db #(src_config)::get(this,"","src_config",src_cfg))
+		`uvm_fatal(get_type_name, "getting cfg failed")
+	endfunction
+
+	function void connect_phase(uvm_phase phase);
+	vif = src_cfg.vif;
+	endfunction
+
+	task run_phase(uvm_phase phase);
+		super.run_phase(phase);
+	//	forever
+		//	collect_data();
+	endtask
+
+	//task collect data
+endclass

@@ -1,0 +1,38 @@
+class env extends uvm_env;
+`uvm_component_utils(env)
+
+	env_config env_cfg;
+	src_config src_cfg;
+	dst_config dst_cfg;
+	src_agent src_agt;
+	dst_agent dst_agt;
+	scoreboard sb;
+
+
+	function new(string name = "env", uvm_component parent);
+		super.new(name,parent);
+	endfunction
+
+	function void build_phase(uvm_phase phase);
+		if(!uvm_config_db #(env_config)::get(this,"","env_config",env_cfg))
+			`uvm_fatal(get_type_name,"getting cfg failed")
+
+	if(env_cfg.has_src_agent)
+		src_agt = src_agent::type_id::create("src_agt",this);
+		uvm_config_db#(src_config)::set(this,"*","src_config",env_cfg.src_cfg);
+	
+	if(env_cfg.has_dst_agent)
+		dst_agt = dst_agent::type_id::create("dst_agt",this);
+		uvm_config_db#(dst_config)::set(this,"*","dst_config",env_cfg.dst_cfg);
+	
+	if(env_cfg.has_scoreboard)
+		sb = scoreboard::type_id::create("sb",this);
+	
+	endfunction
+	
+	function void connect_phase(uvm_phase phase);
+		src_agt.src_monh.src_ap.connect(sb.fifo_src.analysis_export);
+		dst_agt.dst_monh.dst_ap.connect(sb.fifo_dst.analysis_export);
+	endfunction
+	
+endclass
